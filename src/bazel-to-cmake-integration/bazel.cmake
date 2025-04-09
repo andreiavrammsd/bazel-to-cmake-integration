@@ -1,13 +1,12 @@
 set(_THIS_MODULE_BASE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
-set(BAZEL_PYTHON_PATH "python3")
 set(BAZEL_WORKSPACE "")
 set(BAZEL_DEBUG OFF)
 set(BAZEL_DEBUG_MESSAGE_LIMIT 0)
-set(BAZEL_DEBUG_MESSAGE_LENGTH)
 set(BAZEL_ARGS "")
-set(BAZEL_SHELL "")
 set(BAZEL_BUILD_TARGET ON)
+set(BAZEL_SHELL "")
+set(BAZEL_PYTHON_PATH python3)
 
 function(bazel cmake_target cmake_visibility bazel_target)
   if(BAZEL_WORKSPACE STREQUAL "")
@@ -23,13 +22,13 @@ function(bazel cmake_target cmake_visibility bazel_target)
   if(NOT BAZEL_ARGS STREQUAL "")
     set(_BAZEL_ARGS --args=${BAZEL_ARGS})
   endif()
-
-  if(NOT BAZEL_SHELL STREQUAL "")
-    set(_BAZEL_SHELL --shell=${BAZEL_SHELL})
-  endif()
-
+  
   if(NOT BAZEL_BUILD_TARGET)
     set(_BAZEL_NO_BUILD --no-build)
+  endif()
+  
+  if(NOT BAZEL_SHELL STREQUAL "")
+    set(_BAZEL_SHELL --shell=${BAZEL_SHELL})
   endif()
 
   execute_process(

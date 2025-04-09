@@ -1,2 +1,5 @@
 build
-bazel-*
+bazel-bin
+bazel-out
+bazel-testlogs
+bazel-workspace
