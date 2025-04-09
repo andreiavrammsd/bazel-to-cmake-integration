@@ -1,0 +1,44 @@
+{
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.exclude": {
+        "**/.cache": true,
+        "**/.pytest_cache": true,
+        "**/bazel-bin": true,
+        "**/bazel-out": true,
+        "**/bazel-testlogs": true,
+        "**/bazel-workspace": true,
+        "**/build": true,
+        "**/__pycache__": true,
+        "**/bazel-bzl_world": true,
+        "**/bazel-main_project": true,
+    },
+    "search.exclude": {
+        "**/.cache": true,
+        "**/.pytest_cache": true,
+        "**/bazel-bin": true,
+        "**/bazel-out": true,
+        "**/bazel-testlogs": true,
+        "**/bazel-workspace": true,
+        "**/build": true,
+        "**/__pycache__": true,
+        "**/bazel-bzl_world": true,
+        "**/bazel-main_project": true,
+    },
+    "cmake.sourceDirectory": "/workspace/main_project/cmk",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": [
+        "source.fixAll"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "[dockerfile]": {
+        "editor.tabSize": 4,
+        "editor.detectIndentation": false
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+        "editor.formatOnPaste": true
+    },
+}

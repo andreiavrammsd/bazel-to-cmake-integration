@@ -1,0 +1,2 @@
+build:warnings --cxxopt=-Wall
+build:warnings --cxxopt=-Werror

@@ -1,0 +1,32 @@
+{
+    "name": "Bazel to CMake integration",
+    "dockerFile": "Dockerfile",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.makefile-tools",
+                "ms-vscode.cmake-tools",
+                "ms-vscode.cpptools",
+                "ms-vscode.cpptools-extension-pack",
+                "twxs.cmake",
+                "streetsidesoftware.code-spell-checker",
+                "bazelbuild.vscode-bazel",
+                "ms-python.python",
+                "ms-python.black-formatter",
+                "DavidAnson.vscode-markdownlint"
+            ]
+        }
+    },
+    "mounts": [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+        "source=${env:HOME}/.ssh,target=/home/ubuntu/.ssh,type=bind,consistency=cached",
+        "source=cache,target=/home/ubuntu/.cache,type=volume"
+    ],
+    "workspaceFolder": "/workspace",
+    "runArgs": [
+        "--cap-add=SYS_PTRACE",
+        "--security-opt",
+        "seccomp=unconfined"
+    ],
+    "remoteUser": "ubuntu"
+}
