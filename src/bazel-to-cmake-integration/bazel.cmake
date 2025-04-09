@@ -1,6 +1,6 @@
 set(_THIS_MODULE_BASE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
-set(BAZEL_WORKSPACE "")
+set(BAZEL_WORKSPACE)
 set(BAZEL_DEBUG OFF)
 set(BAZEL_DEBUG_MESSAGE_LIMIT 0)
 set(BAZEL_ARGS "")
@@ -9,7 +9,7 @@ set(BAZEL_SHELL "")
 set(BAZEL_PYTHON_PATH python3)
 
 function(bazel cmake_target cmake_visibility bazel_target)
-  if(BAZEL_WORKSPACE STREQUAL "")
+  if(NOT BAZEL_WORKSPACE)
     message(FATAL_ERROR "BAZEL_WORKSPACE is not set")
   endif()
 
