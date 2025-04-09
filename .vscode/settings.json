@@ -1,0 +1,19 @@
+{
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.exclude": {
+        "**/.cache": true,
+        "**/.pytest_cache": true,
+        "**/bazel-*": true,
+        "**/build": true,
+        "**/__pycache__": true,
+    },
+    "search.exclude": {
+        "**/.cache": true,
+        "**/.pytest_cache": true,
+        "**/bazel-*": true,
+        "**/build": true,
+        "**/__pycache__": true,
+    },
+    "cmake.sourceDirectory": "/workspace/main_project/cmk",
+}

@@ -29,12 +29,12 @@ class Test(unittest.TestCase):
         expected_err = """bazel start //bzl:bzl
 
 Namespace(target='//bzl:bzl', debug=True, debug_message_limit=0, args='', shell='/bin/bash', no_build=False)
-workspace: /project/main_project
+workspace: /workspace/main_project
 command: bazel build  //bzl:bzl
 result: 
 
 command: bazel info  output_base
-result: /root/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a
+result: /home/ubuntu/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a
 
 command: bazel query 'deps(//bzl:bzl)'
 result: //bzl:bzl
@@ -721,19 +721,19 @@ result: bazel-out/k8-fastbuild/bin/bzl/libbzl.a
 
 
 output for cmake:
-/project/main_project/ /project/main_project/bzl /root/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/bazel_tools~cc_configure_extension~local_config_cc/include /root/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.assert~/include /root/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.config~/include /root/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.container_hash~/include /root/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.container~/include /root/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.describe~/include /root/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.intrusive~/include /root/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.move~/include /root/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.mp11~/include /root/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.static_assert~/include /root/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.type_traits~/include /project/main_project/bazel-out/k8-fastbuild/bin/bzl
+/workspace/main_project/ /workspace/main_project/bzl /home/ubuntu/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/bazel_tools~cc_configure_extension~local_config_cc/include /home/ubuntu/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.assert~/include /home/ubuntu/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.config~/include /home/ubuntu/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.container_hash~/include /home/ubuntu/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.container~/include /home/ubuntu/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.describe~/include /home/ubuntu/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.intrusive~/include /home/ubuntu/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.move~/include /home/ubuntu/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.mp11~/include /home/ubuntu/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.static_assert~/include /home/ubuntu/.cache/bazel/_bazel_root/fe5b576dcd0a70e859005dbf05d7e27a/external/boost.type_traits~/include /workspace/main_project/bazel-out/k8-fastbuild/bin/bzl
 
 bazel end //bzl:bzl
 
 bazel start //:world
 
 Namespace(target='//:world', debug=True, debug_message_limit=1550, args='--config=warnings -c dbg', shell='/bin/bash', no_build=False)
-workspace: /project/bzl_world
+workspace: /workspace/bzl_world
 command: bazel build --config=warnings -c dbg //:world
 result: 
 
 command: bazel info --config=warnings -c dbg output_base
-result: /root/.cache/bazel/_bazel_root/38fa6c732256aafec01ce927d9d05b91
+result: /home/ubuntu/.cache/bazel/_bazel_root/d8443efb727847cc1e689e16f57108e0
 
 command: bazel query 'deps(//:world)'
 result: //:include/world/world.hpp
@@ -774,7 +774,7 @@ result: bazel-out/k8-dbg/bin/libworld.a
 
 
 output for cmake:
-/project/bzl_world/include /project/bzl_world/ /project/bzl_world/src /root/.cache/bazel/_bazel_root/38fa6c732256aafec01ce927d9d05b91/external/bazel_tools~cc_configure_extension~local_config_cc/include /root/.cache/bazel/_bazel_root/38fa6c732256aafec01ce927d9d05b91/external/boost.assert~/include /root/.cache/bazel/_bazel_root/38fa6c732256aafec01ce927d9d05b91/external/boost.config~/include /root/.cache/bazel/_bazel_root/38fa6c732256aafec01ce927d9d05b91/external/boost.container_hash~/include /root/.cache/bazel/_bazel_root/38fa6c732256aafec01ce927d9d05b91/external/boost.container~/include /root/.cache/bazel/_bazel_root/38fa6c732256aafec01ce927d9d05b91/external/boost.describe~/include /root/.cache/bazel/_bazel_root/38fa6c732256aafec01ce927d9d05b91/external/boost.intrusive~/include /root/.cache/bazel/_bazel_root/38fa6c732256aafec01ce927d9d05b91/external/boost.move~/include /root/.cache/bazel/_bazel_root/38fa6c732256aafec01ce927d9d05b91/external/boost.mp11~/include /root/.cache/bazel/_bazel_root/38fa6c732256aafec01ce927d9d05b91/external/boost.static_assert~/include /root/.cache/bazel/_bazel_root/38fa6c732256aafec01ce927d9d05b91/external/boost.type_traits~/include /project/bzl_world/bazel-out/k8-dbg/bin
+/workspace/bzl_world/include /workspace/bzl_world/ /workspace/bzl_world/src /home/ubuntu/.cache/bazel/_bazel_root/d8443efb727847cc1e689e16f57108e0/external/bazel_tools~cc_configure_extension~local_config_cc/include /home/ubuntu/.cache/bazel/_bazel_root/d8443efb727847cc1e689e16f57108e0/external/boost.assert~/include /home/ubuntu/.cache/bazel/_bazel_root/d8443efb727847cc1e689e16f57108e0/external/boost.config~/include /home/ubuntu/.cache/bazel/_bazel_root/d8443efb727847cc1e689e16f57108e0/external/boost.container_hash~/include /home/ubuntu/.cache/bazel/_bazel_root/d8443efb727847cc1e689e16f57108e0/external/boost.container~/include /home/ubuntu/.cache/bazel/_bazel_root/d8443efb727847cc1e689e16f57108e0/external/boost.describe~/include /home/ubuntu/.cache/bazel/_bazel_root/d8443efb727847cc1e689e16f57108e0/external/boost.intrusive~/include /home/ubuntu/.cache/bazel/_bazel_root/d8443efb727847cc1e689e16f57108e0/external/boost.move~/include /home/ubuntu/.cache/bazel/_bazel_root/d8443efb727847cc1e689e16f57108e0/external/boost.mp11~/include /home/ubuntu/.cache/bazel/_bazel_root/d8443efb727847cc1e689e16f57108e0/external/boost.static_assert~/include /home/ubuntu/.cache/bazel/_bazel_root/d8443efb727847cc1e689e16f57108e0/external/boost.type_traits~/include /workspace/bzl_world/bazel-out/k8-dbg/bin
 
 bazel end //:world"""
 
