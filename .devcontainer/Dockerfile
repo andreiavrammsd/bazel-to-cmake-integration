@@ -2,7 +2,7 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     apt-transport-https \
     ca-certificates \
     cmake \
@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     openjdk-17-jdk \
     software-properties-common \
     sudo \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > /usr/share/keyrings/bazel-archive-keyring.gpg \
