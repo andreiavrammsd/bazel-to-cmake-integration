@@ -27,6 +27,23 @@ jobs:
       run: |
         echo "No relevant changes. Skipping build."
 
+    - name: Get branch name slug
+      id: slug
+      run: |
+        echo "slugged_branch=$(echo "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-')" >> $GITHUB_OUTPUT
+
+
+    - name: Set Docker tag
+      id: docker_tag
+      run: |
+        if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+          echo "tag=latest" >> $GITHUB_OUTPUT
+        elif [[ "${{ steps.changes.outputs.relevant }}" == "true" ]]; then
+          echo "tag=${{ steps.slug.outputs.slugged_branch }}" >> $GITHUB_OUTPUT
+        else
+          echo "tag=latest" >> $GITHUB_OUTPUT
+        fi
+
     - name: Login to Docker Hub
       uses: docker/login-action@v3
       with:
@@ -44,7 +61,7 @@ jobs:
         context: .
         file: .devcontainer/Dockerfile
         push: true
-        tags: andreiavrammsd/bazel-to-cmake-integration:latest
+        tags: andreiavrammsd/bazel-to-cmake-integration:${{ steps.docker_tag.outputs.tag }}
       if: steps.changes.outputs.relevant == 'true'
 
   test:
@@ -52,7 +69,7 @@ jobs:
     needs: build
 
     container:
-      image: andreiavrammsd/bazel-to-cmake-integration
+      image: andreiavrammsd/bazel-to-cmake-integration:${{ needs.build.outputs.docker_tag }}
       options: --user root -v ${{ github.workspace }}:/workspace/:rw
 
     steps:
