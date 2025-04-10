@@ -9,25 +9,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    container:
+      image: andreiavrammsd/bazel-to-cmake-integration
+      options: --user ubuntu -v ${{ github.workspace }}:/workspace/:rw
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Docker
-      uses: docker/setup-docker-action@v4
-
-    - name: Cache Docker layers
-      uses: actions/cache@v3
-      with:
-        path: /tmp/.build-cache
-        key: ${{ runner.os }}-docker-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-docker-
-
-    - name: Build Docker image
-      run: docker build --cache-from test -t test -f .devcontainer/Dockerfile .
-
     - name: Run tests
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/workspace test ls -l && whoami
+      run: test ls -l && whoami
