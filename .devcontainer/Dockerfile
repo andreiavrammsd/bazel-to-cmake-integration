@@ -22,9 +22,13 @@ RUN curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > /usr/
     && apt-get update && apt-get install -y bazel-7.6.1 \
     && ln -s /usr/bin/bazel-7.6.1 /usr/bin/bazel \
     && rm -rf /var/lib/apt/lists/*
+    
+ARG USERNAME=ubuntu
+RUN passwd -d ${USERNAME} \
+    && mkdir -p /home/${USERNAME}/.cache && chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.cache \
+    && SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/home/${USERNAME}/.cache/.bash_history" \
+    && echo "$SNIPPET" >> "/home/${USERNAME}/.bash_aliases"
 
-RUN passwd -d ubuntu
-
-USER ubuntu
+USER ${USERNAME}
 
 WORKDIR /workspace

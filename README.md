@@ -60,12 +60,11 @@ target_link_libraries(my_program bazel-project)
 
 ## Why
 
-
 ## How to use
 
 ### Requirements
 
-Besides the 
+Besides the
 CMake and Bazel...
 python3.12?
 cmake2.8?
@@ -105,6 +104,6 @@ target_link_libraries(my_program bazel-project)
 | BAZEL_SHELL                |                          | ""             |
 | BAZEL_PYTHON_PATH          |                          | python3        |
 
-
 ## Development status
+
 Tested only on Ubuntu

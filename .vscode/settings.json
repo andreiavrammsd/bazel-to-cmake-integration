@@ -22,4 +22,19 @@
         "**/__pycache__": true,
     },
     "cmake.sourceDirectory": "/workspace/main_project/cmk",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": [
+        "source.fixAll"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "[dockerfile]": {
+        "editor.tabSize": 4,
+        "editor.detectIndentation": false
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+        "editor.formatOnPaste": true
+    },
 }
