@@ -1,6 +1,6 @@
 # Bazel to CMake integration
 
-[![test](https://github.com/andreiavrammsd/bazel-to-cmake-integration/workflows/test/badge.svg)](https://github.com/andreiavrammsd/bazel-to-cmake-integration/actions/workflows/test.yml)
+[![test](https://github.com/andreiavrammsd/bazel-to-cmake-integration/actions/workflows/test.yml/badge.svg)](https://github.com/andreiavrammsd/bazel-to-cmake-integration/actions/workflows/test.yml)
 
 ## What is this?
 
@@ -62,6 +62,7 @@ Copy the [bazel-to-cmake-integration](https://github.com/andreiavrammsd/bazel-to
 | Linux            | It was tested only on Ubuntu 24.04|
 
 You can automate installation:
+
 ```cmake
 set(BAZEL_TO_CMAKE_INTEGRATION_LOCATION "/tmp/bazel-to-cmake-integration")
 if(NOT (EXISTS ${BAZEL_TO_CMAKE_INTEGRATION_LOCATION}))
