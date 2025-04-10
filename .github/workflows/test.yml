@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: andreiavrammsd/bazel-to-cmake-integration
-      options: --user ubuntu -v ${{ github.workspace }}:/workspace/:rw
+      options: --user root -v ${{ github.workspace }}:/workspace/:rw
 
     steps:
     - name: Checkout code
