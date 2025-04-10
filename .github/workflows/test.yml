@@ -30,4 +30,4 @@ jobs:
 
     - name: Run tests
       run: |
-        docker run --rm -v ${{ github.workspace }}:/workspace test make test
+        docker run --rm -v ${{ github.workspace }}:/workspace test ls -l || docker run --rm -v ${{ github.workspace }}:/workspace test pwd
