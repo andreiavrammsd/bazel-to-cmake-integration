@@ -75,7 +75,7 @@ jobs:
     needs: build
 
     container:
-      image: andreiavrammsd/bazel-to-cmake-integration:${{ needs.build.outputs.docker_tag }}
+      image: andreiavrammsd/bazel-to-cmake-integration:${{ needs.build.outputs.tag }}
       options: --user root -v ${{ github.workspace }}:/workspace/:rw
 
     steps:
