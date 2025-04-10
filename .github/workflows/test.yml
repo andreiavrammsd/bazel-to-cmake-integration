@@ -30,4 +30,4 @@ jobs:
 
     - name: Run tests
       run: |
-        docker run --rm -v ${{ github.workspace }}:/workspace test ll
+        docker run --rm -v ${{ github.workspace }}:/workspace test ls -l && whoami
