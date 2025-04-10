@@ -4,7 +4,11 @@ on:
   push:
     branches:
       - master
+    paths:
+      - .devcontainer/Dockerfile
   pull_request:
+    paths:
+      - .devcontainer/Dockerfile
 
 jobs:
   build:
