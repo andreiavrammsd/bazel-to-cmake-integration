@@ -67,8 +67,8 @@ You can automate installation:
 set(BAZEL_TO_CMAKE_INTEGRATION_LOCATION "/tmp/bazel-to-cmake-integration")
 if(NOT (EXISTS ${BAZEL_TO_CMAKE_INTEGRATION_LOCATION}))
   message(STATUS "Downloading bazel-to-cmake-integration ${BAZEL_TO_CMAKE_INTEGRATION_LOCATION}")
-  file(DOWNLOAD https://github.com/andreiavrammsd/bazel-to-cmake-integration/blob/master/src/bazel-to-cmake-integration/bazel.cmake ${BAZEL_TO_CMAKE_INTEGRATION_LOCATION}/bazel.cmake)
-  file(DOWNLOAD https://github.com/andreiavrammsd/bazel-to-cmake-integration/blob/master/src/bazel-to-cmake-integration/bazel.py ${BAZEL_TO_CMAKE_INTEGRATION_LOCATION}/bazel.py)
+  file(DOWNLOAD https://raw.githubusercontent.com/andreiavrammsd/bazel-to-cmake-integration/refs/heads/master/src/bazel-to-cmake-integration/bazel.cmake ${BAZEL_TO_CMAKE_INTEGRATION_LOCATION}/bazel.cmake)
+  file(DOWNLOAD https://raw.githubusercontent.com/andreiavrammsd/bazel-to-cmake-integration/refs/heads/master/src/bazel-to-cmake-integration/bazel.py ${BAZEL_TO_CMAKE_INTEGRATION_LOCATION}/bazel.py)
 endif()
 ```
 
