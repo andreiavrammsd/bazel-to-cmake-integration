@@ -17,6 +17,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    outputs:
+      docker_tag: ${{ steps.docker_tag.outputs.tag }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -75,7 +78,7 @@ jobs:
     needs: build
 
     container:
-      image: andreiavrammsd/bazel-to-cmake-integration:${{ needs.build.outputs.tag }}
+      image: andreiavrammsd/bazel-to-cmake-integration:${{ needs.build.outputs.docker_tag }}
       options: --user root -v ${{ github.workspace }}:/workspace/:rw
 
     steps:
