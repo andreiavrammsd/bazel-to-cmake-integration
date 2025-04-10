@@ -3,3 +3,4 @@ bazel-bin
 bazel-out
 bazel-testlogs
 bazel-workspace
+bazel-bzl_world

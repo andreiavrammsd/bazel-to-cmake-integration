@@ -35,13 +35,13 @@ function(bazel cmake_target cmake_visibility bazel_target)
     COMMAND ${BAZEL_PYTHON_PATH} ${_THIS_MODULE_BASE_DIR}/bazel.py ${bazel_target} ${_BAZEL_DEBUG} ${_BAZEL_DEBUG_MESSAGE_LIMIT} ${_BAZEL_ARGS} ${_BAZEL_SHELL} ${_BAZEL_NO_BUILD}
     WORKING_DIRECTORY ${BAZEL_WORKSPACE}
     RESULT_VARIABLE RESULT
-    OUTPUT_VARIABLE PACKAGE_INCLUDE
+    OUTPUT_VARIABLE DEPENDENCIES
   )
   if (NOT RESULT EQUAL 0)
-    message(FATAL_ERROR "Bazel failed: ${PACKAGE_INCLUDE}")
+    message(FATAL_ERROR "Bazel failed: ${DEPENDENCIES}")
   endif()
 
-  separate_arguments(DIRECTORIES NATIVE_COMMAND ${PACKAGE_INCLUDE})
+  separate_arguments(DIRECTORIES NATIVE_COMMAND ${DEPENDENCIES})
   target_include_directories(${cmake_target} ${cmake_visibility} ${DIRECTORIES})
   target_link_directories(${cmake_target} ${cmake_visibility} ${DIRECTORIES})
 endfunction()

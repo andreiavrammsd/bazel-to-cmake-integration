@@ -3,12 +3,13 @@ import subprocess
 import pathlib
 import sys
 import argparse
+import xml.etree.ElementTree as ET
 
 
 class Bazel:
     debug_is_on: bool
     debug_message_limit: int
-    workspace: str
+    workspace: pathlib.Path
     shell: str
 
     def __init__(
@@ -16,7 +17,7 @@ class Bazel:
     ):
         self.debug_is_on = debug_is_on
         self.debug_message_limit = debug_message_limit
-        self.workspace = workspace
+        self.workspace = pathlib.Path(workspace)
         self.shell = shell
 
     def debug(self, message):
@@ -32,57 +33,34 @@ class Bazel:
         cmd = f"bazel build {args} {target}"
         self.__run(cmd)
 
-    def get_includes(self, target: str, args: str):
-        cmd = f"bazel info {args} output_base"
-        output_base = self.__run(cmd)
+    def get_include_directories(self, target: str, args: str):
+        cmd = f"bazel query 'deps({target})' --output xml"
+        deps = self.__run(cmd)
 
-        cmd = f"bazel query 'deps({target})'"  # --output package
-        deps = self.__run(cmd).split()
+        root = ET.fromstring(deps)
+        directories = []
 
-        includes = {}
+        for node in root.iter("rule"):
+            if node.get("class") == "cc_library":
+                location = node.get("location")
+                includes = [include.get('value') for include in node.findall(".//list[@name='includes']/string")]
 
-        for dep in deps:
-            if dep.startswith("@@") and "//:" in dep:
-                start = 2
-                end = dep.find("//:", start)
-                path = os.path.join(output_base, "external", dep[start:end], "include")
-                includes[path] = True
-            elif dep.startswith("@") and "//:" in dep:
-                path = os.path.join(
-                    output_base, "external", dep.split("//:")[1] + "~", "include"
-                )
-                if pathlib.Path(path).is_dir():
-                    includes[path] = True
-            elif dep.startswith("//"):  # //:
-                path = pathlib.Path(dep.strip("//:"))
-                include = os.path.join(
-                    self.workspace, path.parts[0] if len(path.parts) > 1 else ""
-                )
-                includes[include] = True
+                root = pathlib.Path(location).parent
+                directories.append(root.as_posix())
 
-                start = dep.find("//") + 2
-                end = dep.find(":", start)
-                root = os.path.join(self.workspace, dep[start:end])
-                includes[root] = True
+                for dep_include in includes:
+                    directories.append((root / pathlib.Path(dep_include)).as_posix())
 
-        return list(includes.keys())
-
+        return directories
+   
     def get_link_directories(self, target: str, args: str):
-        cmd = f"bazel cquery {args} --output=files {target} 2>/dev/null"  # 2>/dev/null?
-        libraries = self.__run(cmd).split()
-
-        # workspace = self.__run(f"bazel info {args} workspace")
-        # if workspace != self.workspace:
-        #     self.debug("buba")
-        #     self.debug(self.workspace)
-        #     self.debug(workspace)
+        cmd = f"bazel cquery {args} --output=files {target}"
+        files = self.__run(cmd).split()
 
         directories = {}
-        for library in libraries:
-            directory = os.path.join(
-                self.workspace, pathlib.Path(library).parent.as_posix()
-            )
-            directories[directory] = True
+        for file in files:
+            directory = self.workspace / pathlib.Path(file).parent
+            directories[directory.as_posix()] = True
 
         return list(directories.keys())
 
@@ -159,7 +137,7 @@ def main():
     if args.no_build is False:
         bazel.build(args.target, args.args)
 
-    include_directories = bazel.get_includes(args.target, args.args)
+    include_directories = bazel.get_include_directories(args.target, args.args)
     link_directories = bazel.get_link_directories(args.target, args.args)
     directories = " ".join(include_directories + link_directories)
     bazel.debug(f"\noutput for cmake:\n{directories}\n")

@@ -18,6 +18,8 @@ This is an experiment. The implementation is coupled to Bazel's internal directo
 
 - Is this mature? No.
 
+- Developed and tested only on Ubuntu.
+
 ###
 
 Instead of
@@ -63,7 +65,10 @@ target_link_libraries(my_program bazel-project)
 
 ### Requirements
 
-CMake and Bazel... python
+Besides the 
+CMake and Bazel...
+python3.12?
+cmake2.8?
 
 ### Examples
 
