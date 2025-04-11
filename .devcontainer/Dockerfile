@@ -40,6 +40,4 @@ RUN passwd -d ${USERNAME} \
 
 USER ${USERNAME}
 
-RUN ls
-
 WORKDIR /workspace
