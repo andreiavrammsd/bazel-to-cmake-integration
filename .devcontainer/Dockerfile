@@ -14,6 +14,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     git \
     gnupg \
     make \
+    nano \
     openjdk-17-jdk \
     software-properties-common \
     sudo \
