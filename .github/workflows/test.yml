@@ -5,6 +5,7 @@ on:
     branches:
       - master
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -70,6 +71,10 @@ jobs:
         file: .devcontainer/Dockerfile
         push: true
         tags: andreiavrammsd/bazel-to-cmake-integration:${{ steps.docker_tag.outputs.tag }}
+        cache-from: |
+          type=registry,ref=andreiavrammsd/bazel-to-cmake-integration:cache
+          type=registry,ref=andreiavrammsd/bazel-to-cmake-integration:cache-${{ steps.slug.outputs.slugged_branch }}
+        cache-to: type=registry,ref=andreiavrammsd/bazel-to-cmake-integration:cache-${{ steps.slug.outputs.slugged_branch }},mode=max
 
   test:
     runs-on: ubuntu-latest
