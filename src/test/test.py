@@ -1,5 +1,6 @@
 import unittest
 import subprocess
+import re
 
 
 class Test(unittest.TestCase):
@@ -21,7 +22,18 @@ class Test(unittest.TestCase):
 
         self.assertEqual(code, 0)
 
-        expected_debug_out = """-- START: hello -> //bzl:bzl
+        # Remove generated paths
+        cleaned_out = re.sub(
+            r'python3 /workspace/src/bazel-to-cmake-integration/bazel\.py /.+?/temp\.xml',
+            'python3 /workspace/src/bazel-to-cmake-integration/bazel.py /workspace/build/temp.xml',
+            out
+        )
+        # Remove everything between the last "END" and the executable output
+        end_match = list(re.finditer(r'^-- END: .*$', cleaned_out, re.MULTILINE))
+        last_end = end_match[-1].end()
+        cleaned_out = cleaned_out[:last_end]
+
+        expected = """-- START: hello -> //bzl:bzl
 -- WORKSPACE: /workspace/src/test/project/main_project
 -- BAZEL ARGUMENTS: 
 -- BAZEL BUILD TARGET: ON
@@ -40,20 +52,9 @@ class Test(unittest.TestCase):
 -- python3 /workspace/src/bazel-to-cmake-integration/bazel.py /workspace/build/temp.xml
 -- bazel cquery --config=warnings -c dbg --output=files //:world
 -- END: hello -> //:world"""
-        self.assertIn(expected_debug_out, out)
 
-        not_expected_debug_out = """-- START: hello -> //:header
--- WORKSPACE: /workspace/src/test/project/bzl_header_only
--- BAZEL ARGUMENTS: -c opt
--- BAZEL BUILD TARGET: OFF
--- bazel query deps(//:header) --output xml
--- python3 /workspace/src/bazel-to-cmake-integration/bazel.py /workspace/build/temp.xml
--- bazel cquery -c opt --output=files //:header
--- END: hello -> //:header"""
-        self.assertNotIn(not_expected_debug_out, out)
-
-        expected_executable_out = "Hello, world!, header,3,2"
-        self.assertIn(expected_executable_out, out)
+        self.maxDiff = None
+        self.assertMultiLineEqual(cleaned_out.strip(), expected.strip())
 
         self.assertEqual(err, "")
 
