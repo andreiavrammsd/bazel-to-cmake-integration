@@ -21,17 +21,20 @@ class Test(unittest.TestCase):
         err = result.stderr.strip()
 
         self.assertEqual(code, 0)
+        self.assertIn("Hello, world!, header,3,2", out)
+        self.assertEqual(err, "")
 
-        # Remove generated paths
-        cleaned_out = re.sub(
+        # Normalize dynamic paths
+        normalized = re.sub(
             r'python3 /workspace/src/bazel-to-cmake-integration/bazel\.py /.+?/temp\.xml',
             'python3 /workspace/src/bazel-to-cmake-integration/bazel.py /workspace/build/temp.xml',
             out
         )
-        # Remove everything between the last "END" and the executable output
-        end_match = list(re.finditer(r'^-- END: .*$', cleaned_out, re.MULTILINE))
-        last_end = end_match[-1].end()
-        cleaned_out = cleaned_out[:last_end]
+
+        # Extract debug entries
+        pattern = re.compile(r"-- START:.*?-- END:.*?(?=\n|$)", re.DOTALL)
+        debug_entries = pattern.findall(normalized)
+        actual_cleaned = "\n\n".join(debug_entries)
 
         expected = """-- START: hello -> //bzl:bzl
 -- WORKSPACE: /workspace/src/test/project/main_project
@@ -54,9 +57,7 @@ class Test(unittest.TestCase):
 -- END: hello -> //:world"""
 
         self.maxDiff = None
-        self.assertMultiLineEqual(cleaned_out.strip(), expected.strip())
-
-        self.assertEqual(err, "")
+        self.assertEqual(actual_cleaned.strip(), expected.strip())
 
 
 if __name__ == "__main__":
