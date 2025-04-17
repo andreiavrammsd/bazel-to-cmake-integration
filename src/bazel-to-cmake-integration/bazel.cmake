@@ -6,8 +6,6 @@ set(BAZEL_BUILD_TARGET ON)
 set(BAZEL_PYTHON_PATH python3)
 set(BAZEL_EXEC bazel)
 
-set(_THIS_MODULE_BASE_DIR "${CMAKE_CURRENT_LIST_DIR}")
-
 function(bazel cmake_target cmake_visibility bazel_target)
   if(NOT BAZEL_WORKSPACE)
     message(FATAL_ERROR "BAZEL_WORKSPACE is not set")
@@ -43,16 +41,25 @@ function(build_bazel_target bazel_target)
 endfunction()
 
 function(set_include_directories bazel_target INCLUDE_DIRS)
-  set(CMD "${BAZEL_EXEC} query deps\(${bazel_target}\) --output xml")
-  run_command(${CMD} INCLUDES_XML)
+  debug("${BAZEL_EXEC} query deps\(${bazel_target}\) --output xml")
+  debug("${BAZEL_PYTHON_PATH} -c \"${_PYTHON_DEPS_PARSER}\"")
 
-  file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/temp.xml "${INCLUDES_XML}")
-
-  set(CMD "${BAZEL_PYTHON_PATH} ${_THIS_MODULE_BASE_DIR}/bazel.py ${CMAKE_CURRENT_BINARY_DIR}/temp.xml")
-  run_command(${CMD} INCLUDES_LIST)
-
-  string(REPLACE "\n" ";" INCLUDES "${INCLUDES_LIST}")
-  set(${INCLUDE_DIRS} "${INCLUDES}" PARENT_SCOPE)
+  execute_process(
+    COMMAND ${BAZEL_EXEC} query deps\(${bazel_target}\) --output xml
+    COMMAND ${BAZEL_PYTHON_PATH} -c "${_PYTHON_DEPS_PARSER}"
+    OUTPUT_VARIABLE INCLUDES_LIST
+    WORKING_DIRECTORY ${BAZEL_WORKSPACE}
+    RESULT_VARIABLE CMD_RESULT
+    OUTPUT_VARIABLE CMD_OUTPUT
+    ERROR_VARIABLE CMD_ERROR
+    TIMEOUT 20
+  )
+  if(CMD_RESULT EQUAL 0)
+    string(REPLACE "\n" ";" INCLUDES "${CMD_OUTPUT}")
+    set(${INCLUDE_DIRS} "${INCLUDES}" PARENT_SCOPE)
+  else()
+      message(FATAL_ERROR "Failed: ${cmd} (exit: ${CMD_RESULT})\r\n${CMD_ERROR}")
+  endif()
 endfunction()
 
 function(set_link_directories bazel_target LINK_DIRS)
@@ -78,7 +85,7 @@ function(run_command cmd OUTPUT)
       RESULT_VARIABLE CMD_RESULT
       OUTPUT_VARIABLE CMD_OUTPUT
       ERROR_VARIABLE CMD_ERROR
-      TIMEOUT 60
+      TIMEOUT 20
   )
   if(CMD_RESULT EQUAL 0)
       set(${OUTPUT} ${CMD_OUTPUT} PARENT_SCOPE)
@@ -86,3 +93,18 @@ function(run_command cmd OUTPUT)
       message(FATAL_ERROR "Failed: ${cmd} (exit: ${CMD_RESULT})\r\n${CMD_ERROR}")
   endif()
 endfunction()
+
+set(_PYTHON_DEPS_PARSER "
+import sys
+import pathlib
+import xml.etree.ElementTree as ET
+
+root = ET.fromstring(sys.stdin.read())
+
+for node in root.iter('rule'):
+    if node.get('class') == 'cc_library':
+        base = pathlib.Path(node.get('location')).parent
+        print(base.as_posix())
+        for i in node.findall('.//list[@name=\"includes\"]/string'):
+            print((base / pathlib.Path(i.get('value'))).as_posix())
+")

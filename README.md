@@ -52,7 +52,7 @@ target_link_libraries(my_program bazel-project)
 
 ## Installation and requirements
 
-Copy the [bazel-to-cmake-integration](https://github.com/andreiavrammsd/bazel-to-cmake-integration/tree/master/src/bazel-to-cmake-integration) directory into your project. You need the following:
+Copy the [bazel.cmake](https://raw.githubusercontent.com/andreiavrammsd/bazel-to-cmake-integration/refs/heads/master/src/bazel-to-cmake-integration/bazel.cmake) file into your project. You need the following:
 
 | Tool             | Version                           |
 |------------------|-----------------------------------|
@@ -68,7 +68,6 @@ set(BAZEL_TO_CMAKE_INTEGRATION_LOCATION "/tmp/bazel-to-cmake-integration")
 if(NOT (EXISTS ${BAZEL_TO_CMAKE_INTEGRATION_LOCATION}))
   message(STATUS "Downloading bazel-to-cmake-integration ${BAZEL_TO_CMAKE_INTEGRATION_LOCATION}")
   file(DOWNLOAD https://raw.githubusercontent.com/andreiavrammsd/bazel-to-cmake-integration/refs/heads/master/src/bazel-to-cmake-integration/bazel.cmake ${BAZEL_TO_CMAKE_INTEGRATION_LOCATION}/bazel.cmake)
-  file(DOWNLOAD https://raw.githubusercontent.com/andreiavrammsd/bazel-to-cmake-integration/refs/heads/master/src/bazel-to-cmake-integration/bazel.py ${BAZEL_TO_CMAKE_INTEGRATION_LOCATION}/bazel.py)
 endif()
 ```
 
