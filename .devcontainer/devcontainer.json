@@ -4,13 +4,8 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "ms-vscode.makefile-tools",
                 "ms-vscode.cmake-tools",
-                "ms-vscode.cpptools",
-                "ms-vscode.cpptools-extension-pack",
-                "twxs.cmake",
                 "streetsidesoftware.code-spell-checker",
-                "bazelbuild.vscode-bazel",
                 "ms-python.python",
                 "ms-python.black-formatter",
                 "DavidAnson.vscode-markdownlint"

@@ -21,11 +21,13 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG BAZEL_VERSION=7.6.1
+ARG BAZEL_VERSION_LATEST=8.2.1
 RUN curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > /usr/share/keyrings/bazel-archive-keyring.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc/apt/sources.list.d/bazel.list \
-    && apt-get update && apt-get install -y bazel-${BAZEL_VERSION} \
-    && ln -s /usr/bin/bazel-${BAZEL_VERSION} /usr/bin/bazel \
+    && apt-get update && apt-get install -y \
+    bazel-7.6.1 \
+    bazel-8.2.1 \
+    && ln -s /usr/bin/bazel-${BAZEL_VERSION_LATEST} /usr/bin/bazel \
     && rm -rf /var/lib/apt/lists/*
 
 ARG BUILDIFIER_VERSION=8.0.3

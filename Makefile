@@ -1,10 +1,10 @@
 .PHONY: build test clean docker
 
 build:
-	mkdir -p build && cd build && cmake ../src/test/project/main_project/cmk && make && ./hello
+	mkdir -p build && cd build && cmake -DBAZEL_VERSION=$(BAZEL_VERSION) ../src/test/project/main_project/cmk && make && ./hello
 
 test:
-	python3 src/test/test.py
+	BAZEL_VERSION=$(BAZEL_VERSION) python3 src/test/test.py
 
 clean:
 	@rm -rf build

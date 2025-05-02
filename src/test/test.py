@@ -1,6 +1,7 @@
 import unittest
 import subprocess
 import re
+import os
 
 
 class Test(unittest.TestCase):
@@ -20,50 +21,68 @@ class Test(unittest.TestCase):
         out = result.stdout.strip()
         err = result.stderr.strip()
 
-        self.assertEqual(code, 0)
-
+        self.assertEqual(code, 0, err)
         self.assertIn("Hello, world!, header,3,2", out)
+        self.assertEqual(err, "")
 
-        expected_err_lines = [
-            "bazel start //bzl:bzl",
-            "Namespace\\(target='//bzl:bzl', debug=True, debug_message_limit=0, args='', shell='/bin/bash', no_build=False\\)",
-            "workspace: /workspace/src/test/project/main_project",
-            "command: bazel build  //bzl:bzl",
-            "result: ",
-            "command: bazel query 'deps\\(//bzl:bzl\\)' --output xml",
-            "result: <\\?xml",
-            "command: bazel cquery  --output=files //bzl:bzl",
-            "result: bazel-out/k8-fastbuild/bin/bzl/libbzl.a",
-            "output for cmake:",
-            "INCLUDE_DIRS=/workspace/src/test/project/main_project/bzl;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/bazel_tools/third_party/def_parser;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/bazel_tools/tools/cpp;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/bazel_tools/tools/cpp;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/bazel_tools/tools/cpp;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.assert~;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.assert~/include;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.config~;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.config~/include;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.container_hash~;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.container_hash~/include;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.container~;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.container~/include;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.describe~;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.describe~/include;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.intrusive~;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.intrusive~/include;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.move~;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.move~/include;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.mp11~;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.mp11~/include;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.static_assert~;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.static_assert~/include;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.type_traits~;/(.+)/.cache/bazel/_bazel_(.+)/(.+)/external/boost.type_traits~/include",
-            "LINK_DIRS=/workspace/src/test/project/main_project/bazel-out/k8-fastbuild/bin/bzl",
-            "bazel end //bzl:bzl",
-            "bazel start //:world",
-            "Namespace\\(target='//:world', debug=True, debug_message_limit=1550, args='--config=warnings -c dbg', shell='/bin/bash', no_build=False\\)",
-            "workspace: /workspace/src/test/project/bzl_world",
-            "command: bazel build --config=warnings -c dbg //:world",
-            "result: ",
-            "command: bazel query 'deps\\(//:world\\)' --output xml",
-            "result: <\\?xml",
-            "command: bazel cquery --config=warnings -c dbg --output=files //:world",
-            "result: bazel-out/k8-dbg/bin/libworld.a",
-            "output for cmake:",
-            "INCLUDE_DIRS=/workspace/src/test/project/bzl_world;/workspace/src/test/project/bzl_world/include;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/bazel_tools/third_party/def_parser;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/bazel_tools/tools/cpp;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/bazel_tools/tools/cpp;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/bazel_tools/tools/cpp;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/boost.assert~;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/boost.assert~/include;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/boost.config~;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/boost.config~/include;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/boost.container_hash~;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/boost.container_hash~/include;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/boost.container~;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/boost.container~/include;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/boost.describe~;/(.+)/.cache/bazel/_bazel_(.+)/ef59b02dc6417aa54023925d5e1ab254/external/boo...",
-            "bazel end //:world",
-        ]
+        # Extract debug entries
+        pattern = re.compile(r"-- START:.*?-- END:.*?(?=\n|$)", re.DOTALL)
+        debug_entries = pattern.findall(out)
+        actual_cleaned = "\n\n".join(debug_entries)
 
-        for line in expected_err_lines:
-            if not re.search(line, err):
-                self.fail(line)
+        expected_bazel_exec = (
+            f"bazel-{os.environ["BAZEL_VERSION"]}"
+            if os.environ["BAZEL_VERSION"]
+            else "bazel"
+        )
+        expected = f"""-- START: hello -> //bzl:bzl
+-- WORKSPACE: /workspace/src/test/project/main_project
+-- BAZEL ARGUMENTS: 
+-- BAZEL BUILD TARGET: ON
+-- {expected_bazel_exec} build  //bzl:bzl
+-- {expected_bazel_exec} query deps(//bzl:bzl) --output xml
+-- python3 -c "
+import sys
+import pathlib
+import xml.etree.ElementTree as ET
 
-        not_expected_err_lines = [
-            "bazel start //:header",
-            "bazel end //:header",
-        ]
+root = ET.fromstring(sys.stdin.read())
 
-        for line in not_expected_err_lines:
-            if re.search(line, err):
-                self.fail(line)
+for node in root.iter('rule'):
+    if node.get('class') == 'cc_library':
+        base = pathlib.Path(node.get('location')).parent
+        print(base.as_posix())
+        for i in node.findall('.//list[@name="includes"]/string'):
+            print((base / pathlib.Path(i.get('value'))).as_posix())
+"
+-- {expected_bazel_exec} cquery  --output=files //bzl:bzl
+-- END: hello -> //bzl:bzl
+
+-- START: hello -> //:world
+-- WORKSPACE: /workspace/src/test/project/bzl_world
+-- BAZEL ARGUMENTS: --config=warnings -c dbg
+-- BAZEL BUILD TARGET: ON
+-- {expected_bazel_exec} build --config=warnings -c dbg //:world
+-- {expected_bazel_exec} query deps(//:world) --output xml
+-- python3 -c "
+import sys
+import pathlib
+import xml.etree.ElementTree as ET
+
+root = ET.fromstring(sys.stdin.read())
+
+for node in root.iter('rule'):
+    if node.get('class') == 'cc_library':
+        base = pathlib.Path(node.get('location')).parent
+        print(base.as_posix())
+        for i in node.findall('.//list[@name="includes"]/string'):
+            print((base / pathlib.Path(i.get('value'))).as_posix())
+"
+-- {expected_bazel_exec} cquery --config=warnings -c dbg --output=files //:world
+-- END: hello -> //:world"""
+
+        self.maxDiff = None
+        self.assertEqual(actual_cleaned.strip(), expected.strip())
 
 
 if __name__ == "__main__":
