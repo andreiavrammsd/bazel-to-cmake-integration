@@ -30,7 +30,11 @@ class Test(unittest.TestCase):
         debug_entries = pattern.findall(out)
         actual_cleaned = "\n\n".join(debug_entries)
 
-        expected_bazel_exec = f"bazel-{os.environ["BAZEL_VERSION"]}" if os.environ["BAZEL_VERSION"] else "bazel"
+        expected_bazel_exec = (
+            f"bazel-{os.environ["BAZEL_VERSION"]}"
+            if os.environ["BAZEL_VERSION"]
+            else "bazel"
+        )
         expected = f"""-- START: hello -> //bzl:bzl
 -- WORKSPACE: /workspace/src/test/project/main_project
 -- BAZEL ARGUMENTS: 
