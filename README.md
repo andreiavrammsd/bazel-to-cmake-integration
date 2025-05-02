@@ -56,10 +56,10 @@ Copy the [bazel.cmake](https://raw.githubusercontent.com/andreiavrammsd/bazel-to
 
 | Tool             | Version                           |
 |------------------|-----------------------------------|
-| CMake            | 3.0+                              |
+| CMake            | 3+                              |
 | Python           | 3.5+                              |
-| Bazel            | Tested with 7.6.1                 |
-| Linux            | It was tested only on Ubuntu 24.04|
+| Bazel            | 7+                 |
+| Linux            | Tested only on Ubuntu 24.04|
 
 You can automate installation:
 

@@ -1,1 +1,1 @@
-bazel_dep(name = "boost.container", version = "1.83.0")
+bazel_dep(name = "boost.container", version = "1.87.0")

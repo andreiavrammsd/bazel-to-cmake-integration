@@ -5,3 +5,4 @@ bazel-testlogs
 bazel-workspace
 bazel-bzl_world
 bazel-main_project
+MODULE.bazel.lock

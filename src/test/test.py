@@ -1,6 +1,7 @@
 import unittest
 import subprocess
 import re
+import os
 
 
 class Test(unittest.TestCase):
@@ -20,7 +21,7 @@ class Test(unittest.TestCase):
         out = result.stdout.strip()
         err = result.stderr.strip()
 
-        self.assertEqual(code, 0)
+        self.assertEqual(code, 0, err)
         self.assertIn("Hello, world!, header,3,2", out)
         self.assertEqual(err, "")
 
@@ -29,12 +30,13 @@ class Test(unittest.TestCase):
         debug_entries = pattern.findall(out)
         actual_cleaned = "\n\n".join(debug_entries)
 
-        expected = """-- START: hello -> //bzl:bzl
+        expected_bazel_exec = f"bazel-{os.environ["BAZEL_VERSION"]}" if os.environ["BAZEL_VERSION"] else "bazel"
+        expected = f"""-- START: hello -> //bzl:bzl
 -- WORKSPACE: /workspace/src/test/project/main_project
 -- BAZEL ARGUMENTS: 
 -- BAZEL BUILD TARGET: ON
--- bazel build  //bzl:bzl
--- bazel query deps(//bzl:bzl) --output xml
+-- {expected_bazel_exec} build  //bzl:bzl
+-- {expected_bazel_exec} query deps(//bzl:bzl) --output xml
 -- python3 -c "
 import sys
 import pathlib
@@ -49,15 +51,15 @@ for node in root.iter('rule'):
         for i in node.findall('.//list[@name="includes"]/string'):
             print((base / pathlib.Path(i.get('value'))).as_posix())
 "
--- bazel cquery  --output=files //bzl:bzl
+-- {expected_bazel_exec} cquery  --output=files //bzl:bzl
 -- END: hello -> //bzl:bzl
 
 -- START: hello -> //:world
 -- WORKSPACE: /workspace/src/test/project/bzl_world
 -- BAZEL ARGUMENTS: --config=warnings -c dbg
 -- BAZEL BUILD TARGET: ON
--- bazel build --config=warnings -c dbg //:world
--- bazel query deps(//:world) --output xml
+-- {expected_bazel_exec} build --config=warnings -c dbg //:world
+-- {expected_bazel_exec} query deps(//:world) --output xml
 -- python3 -c "
 import sys
 import pathlib
@@ -72,7 +74,7 @@ for node in root.iter('rule'):
         for i in node.findall('.//list[@name="includes"]/string'):
             print((base / pathlib.Path(i.get('value'))).as_posix())
 "
--- bazel cquery --config=warnings -c dbg --output=files //:world
+-- {expected_bazel_exec} cquery --config=warnings -c dbg --output=files //:world
 -- END: hello -> //:world"""
 
         self.maxDiff = None

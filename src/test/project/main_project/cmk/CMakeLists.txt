@@ -7,6 +7,10 @@ include(bazel)
 
 add_executable(hello main.cpp)
 
+if (BAZEL_VERSION)
+    set(BAZEL_EXEC bazel-${BAZEL_VERSION})
+endif()
+
 set(BAZEL_WORKSPACE ${PROJECT_ROOT}/src/test/project/main_project)
 set(BAZEL_DEBUG ON)
 bazel(hello PRIVATE //bzl:bzl)
