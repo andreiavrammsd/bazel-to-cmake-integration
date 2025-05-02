@@ -6,24 +6,23 @@ import os
 
 class Test(unittest.TestCase):
     def test(self):
-        result = subprocess.run(
-            [
-                "make",
-                "-s",
-                "build",
-            ],
-            capture_output=True,
+        process = subprocess.Popen(
+            ["make", "-s", "build"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
             text=True,
-            check=False,
         )
 
-        code = result.returncode
-        out = result.stdout.strip()
-        err = result.stderr.strip()
+        out = ""
+        for line in process.stdout:
+            print(line, end="")
+            out += line
+        process.stdout.close()
 
-        self.assertEqual(code, 0, err)
+        process.wait()
+
+        self.assertEqual(process.returncode, 0, out)
         self.assertIn("Hello, world!, header,3,2", out)
-        self.assertEqual(err, "")
 
         # Extract debug entries
         pattern = re.compile(r"-- START:.*?-- END:.*?(?=\n|$)", re.DOTALL)
