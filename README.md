@@ -117,4 +117,4 @@ cmake -S . -B build -DBAZEL_VERSION=7.6.1
 ctest --test-dir build --output-on-failure
 ```
 
-The integration test is tested with Bazel 7, 8, and 9 (and requires a working C++ toolchain). `BAZEL_VERSION` is optional when Bazel is already available.
+The integration test runs with Bazel 7, 8, 9, and 10 (and requires a working C++ toolchain). `BAZEL_VERSION` is optional when Bazel is already available.
