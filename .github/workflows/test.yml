@@ -95,7 +95,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        bazel: [7.6.1, 8.2.1]
+        bazel: [7.6.1, 8.2.1, 9.3.1, 10.0.0rc2]
 
     container:
       image: andreiavrammsd/bazel-to-cmake-integration:${{ needs.build.outputs.docker_tag }}

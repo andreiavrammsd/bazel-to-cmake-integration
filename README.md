@@ -58,8 +58,8 @@ Copy the [bazel.cmake](https://raw.githubusercontent.com/andreiavrammsd/bazel-to
 |------------------|-----------------------------------|
 | CMake            | 3+                                |
 | Python           | 3.5+                              |
-| Bazel            | 7, 8                              |
-| Linux            | Tested only on Ubuntu 24.04       |
+| Bazel            | 7, 8, 9, 10                       |
+| Linux            | Tested only on                    |
 
 You can automate installation:
 
@@ -117,4 +117,4 @@ cmake -S . -B build -DBAZEL_VERSION=7.6.1
 ctest --test-dir build --output-on-failure
 ```
 
-The integration test requires Bazel 7 or newer (and a working C++ toolchain). `BAZEL_VERSION` is optional when Bazel is already available.
+The integration test is tested with Bazel 7, 8, and 9 (and requires a working C++ toolchain). `BAZEL_VERSION` is optional when Bazel is already available.
