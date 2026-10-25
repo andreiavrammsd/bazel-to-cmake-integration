@@ -59,7 +59,7 @@ Copy the [bazel.cmake](https://raw.githubusercontent.com/andreiavrammsd/bazel-to
 | CMake            | 3+                                |
 | Python           | 3.5+                              |
 | Bazel            | 7, 8, 9, 10                       |
-| Linux            | Tested only on                    |
+| Linux            | Tested only on Ubuntu             |
 
 You can automate installation:
 
