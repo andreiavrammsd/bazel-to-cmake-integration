@@ -56,10 +56,10 @@ Copy the [bazel.cmake](https://raw.githubusercontent.com/andreiavrammsd/bazel-to
 
 | Tool             | Version                           |
 |------------------|-----------------------------------|
-| CMake            | 3+                              |
+| CMake            | 3+                                |
 | Python           | 3.5+                              |
-| Bazel            | 7+                 |
-| Linux            | Tested only on Ubuntu 24.04|
+| Bazel            | 7, 8                              |
+| Linux            | Tested only on Ubuntu 24.04       |
 
 You can automate installation:
 
@@ -89,7 +89,6 @@ set(BAZEL_DEBUG ON)
 set(BAZEL_DEBUG_MESSAGE_LIMIT 1550)
 set(BAZEL_ARGS "--config=warnings -c dbg")
 set(BAZEL_BUILD_TARGET ON)
-set(BAZEL_PYTHON_PATH python3)
 
 bazel(hello PRIVATE //:bazel-project)
 target_link_libraries(my_program bazel-project)
@@ -108,4 +107,14 @@ See the [test project](./src/test/project/main_project/cmk/CMakeLists.txt).
 | BAZEL_DEBUG_MESSAGE_LIMIT  | Limit of a debug message length. 0 means no limit.                         | 0              |
 | BAZEL_ARGS                 | A string with Bazel arguments (eg: --config=warnings -c opt).                         | ""             |
 | BAZEL_BUILD_TARGET         | Whether to build the Bazel target during the CMake build. Set it to OFF if you want build it before anything.                         | ON             |
-| BAZEL_PYTHON_PATH          | Python executable.                         | python3        |
+
+## Tests
+
+The CMake/CTest test suite includes a CMake-only Bazel XML parser test and an integration build:
+
+```sh
+cmake -S . -B build -DBAZEL_VERSION=7.6.1
+ctest --test-dir build --output-on-failure
+```
+
+The integration test requires Bazel 7 or newer (and a working C++ toolchain). `BAZEL_VERSION` is optional when Bazel is already available.
