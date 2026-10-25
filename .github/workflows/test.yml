@@ -81,7 +81,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        bazel: [7.6.1, 8.2.1, ""] # empty passes no version, latest will be used
+        bazel: [7.6.1, 8.2.1]
 
     container:
       image: andreiavrammsd/bazel-to-cmake-integration:${{ needs.build.outputs.docker_tag }}

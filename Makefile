@@ -1,7 +1,8 @@
 .PHONY: build test clean docker
 
 build:
-	mkdir -p build && cd build && cmake -DBAZEL_VERSION=$(BAZEL_VERSION) ../src/test/project/main_project/cmk && make && ./hello
+	if [ -n "$(BAZEL_VERSION)" ]; then export USE_BAZEL_VERSION="$(BAZEL_VERSION)"; fi; \
+	mkdir -p build && cd build && cmake ../src/test/project/main_project/cmk && make && ./hello
 
 test:
 	BAZEL_VERSION=$(BAZEL_VERSION) python3 src/test/test.py

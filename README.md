@@ -89,7 +89,6 @@ set(BAZEL_DEBUG ON)
 set(BAZEL_DEBUG_MESSAGE_LIMIT 1550)
 set(BAZEL_ARGS "--config=warnings -c dbg")
 set(BAZEL_BUILD_TARGET ON)
-set(BAZEL_SHELL /bin/sh)
 set(BAZEL_PYTHON_PATH python3)
 
 bazel(hello PRIVATE //:bazel-project)
@@ -109,5 +108,4 @@ See the [test project](./src/test/project/main_project/cmk/CMakeLists.txt).
 | BAZEL_DEBUG_MESSAGE_LIMIT  | Limit of a debug message length. 0 means no limit.                         | 0              |
 | BAZEL_ARGS                 | A string with Bazel arguments (eg: --config=warnings -c opt).                         | ""             |
 | BAZEL_BUILD_TARGET         | Whether to build the Bazel target during the CMake build. Set it to OFF if you want build it before anything.                         | ON             |
-| BAZEL_SHELL                | Shell to use.                         | /bin/bash             |
 | BAZEL_PYTHON_PATH          | Python executable.                         | python3        |
