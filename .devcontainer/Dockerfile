@@ -2,23 +2,18 @@ FROM ubuntu:26.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y \
-    apt-transport-https \
-    bash-completion \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     black \
     ca-certificates \
     cmake \
     curl \
     g++ \
-    gcc \
     git \
-    gnupg \
     make \
     nano \
-    openjdk-17-jdk \
-    software-properties-common \
+    openssh-client \
+    python3 \
     sudo \
-    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 ARG BAZELISK_VERSION=1.30.0

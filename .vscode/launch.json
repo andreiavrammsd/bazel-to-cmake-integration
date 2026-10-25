@@ -5,7 +5,7 @@
             "name": "Debug",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/test.py",
+            "program": "${workspaceFolder}/src/test/test.py",
             "console": "integratedTerminal",
         },
     ]
